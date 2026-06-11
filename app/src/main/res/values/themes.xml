@@ -15,7 +15,6 @@
         <item name="colorOutline">@color/border_soft</item>
         <item name="textInputStyle">@style/Widget.Kriptotugas1.TextInputLayout</item>
         <item name="materialButtonStyle">@style/Widget.Kriptotugas1.Button</item>
-        <item name="bottomNavigationStyle">@style/Widget.Kriptotugas1.BottomNavigation</item>
     </style>
 
     <style name="Theme.Kriptotugas1" parent="Base.Theme.Kriptotugas1" />
@@ -35,23 +34,5 @@
         <item name="cornerRadius">8dp</item>
         <item name="elevation">0dp</item>
     </style>
-
-    <style name="Widget.Kriptotugas1.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
-        <item name="itemIconSize">24dp</item>
-        <item name="itemRippleColor">@color/primary_soft</item>
-        <item name="itemActiveIndicatorStyle">@style/Widget.Kriptotugas1.BottomNavigation.ActiveIndicator</item>
-    </style>
-
-    <style name="Widget.Kriptotugas1.BottomNavigation.ActiveIndicator" parent="">
-        <item name="android:width">62dp</item>
-        <item name="android:height">32dp</item>
-        <item name="marginHorizontal">4dp</item>
-        <item name="shapeAppearance">@style/ShapeAppearance.Kriptotugas1.NavigationIndicator</item>
-        <item name="android:color">@color/primary_soft</item>
-    </style>
-
-    <style name="ShapeAppearance.Kriptotugas1.NavigationIndicator" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
-    </style>
 </resources>
+

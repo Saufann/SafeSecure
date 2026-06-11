@@ -14,6 +14,5 @@
         <item name="colorOutline">@color/border_soft</item>
         <item name="textInputStyle">@style/Widget.Kriptotugas1.TextInputLayout</item>
         <item name="materialButtonStyle">@style/Widget.Kriptotugas1.Button</item>
-        <item name="bottomNavigationStyle">@style/Widget.Kriptotugas1.BottomNavigation</item>
     </style>
 </resources>
