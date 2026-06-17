@@ -149,7 +149,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pageContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -158,6 +158,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:id="@+id/contentFrame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         <ScrollView
             android:id="@+id/pageHome"
@@ -180,7 +189,7 @@
                     android:id="@+id/tvAppTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SecurePass Inspector"
+                    android:text="Safe-Secure"
                     android:textColor="@color/text_primary"
                     android:textSize="28sp"
                     android:textStyle="bold" />
@@ -266,18 +275,25 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/resultContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                    <com.google.android.material.button.MaterialButton
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnGenerate"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
-                        android:text="🔑 Generate Password"
+                        android:text="Generate Password"
                         android:textAllCaps="false"
                         android:textColor="@color/accent"
                         android:textSize="14sp"
@@ -292,7 +308,7 @@
                         android:layout_height="48dp"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:text="📋 Salin Password"
+                        android:text="Salin Password"
                         android:textAllCaps="false"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp"
@@ -301,6 +317,17 @@
                         app:strokeColor="@color/border_soft"
                         app:strokeWidth="1dp" />
                 </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveVault"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Simpan ke Vault"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    app:backgroundTint="@color/accent"
+                    app:cornerRadius="8dp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -538,8 +565,47 @@
                             android:textSize="14sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
-    </FrameLayout>
+        <LinearLayout
+                android:id="@+id/pageVault"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:text="Password Vault"
+                    android:textColor="@color/text_primary"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvVault"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="20dp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

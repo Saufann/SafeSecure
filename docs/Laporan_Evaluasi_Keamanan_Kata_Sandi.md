@@ -3,159 +3,166 @@
 
 ---
 
-## 1. Latar Belakang
+# BAB I
+# PENDAHULUAN
 
-Keamanan informasi merupakan aspek kritis di era digital saat ini, di mana volume data yang dipertukarkan melalui jaringan internet terus meningkat secara eksponensial. Kata sandi (*password*) masih menjadi mekanisme autentikasi yang paling umum digunakan untuk melindungi akses terhadap sistem informasi, aplikasi, maupun layanan daring (Bonneau et al., 2022). Meskipun metode autentikasi alternatif seperti biometrik dan *multi-factor authentication* telah berkembang pesat, penggunaan kata sandi tetap dominan karena kemudahan implementasi dan kompatibilitasnya yang luas.
+## 1.1 Latar Belakang
 
-Namun, penggunaan kata sandi yang lemah masih menjadi salah satu penyebab utama terjadinya pelanggaran keamanan (*security breach*). Laporan Verizon Data Breach Investigations Report (2023) menunjukkan bahwa lebih dari 80% insiden peretasan melibatkan penggunaan kata sandi yang lemah atau dicuri. Serangan *brute force*, *dictionary attack*, *credential stuffing*, dan *rainbow table attack* merupakan teknik-teknik yang secara aktif digunakan oleh pihak penyerang untuk mengeksploitasi kelemahan kata sandi.
+Keamanan informasi merupakan aspek paling fundamental dan kritis di era transformasi digital saat ini, di mana volume pertukaran data melalui jaringan global internet mengalami peningkatan secara eksponensial. Dalam berbagai arsitektur sistem informasi, aplikasi, maupun layanan daring, kata sandi (*password*) hingga kini masih menjadi mekanisme autentikasi primer yang paling umum diimplementasikan guna melindungi akses terhadap data sensitif (Bonneau et al., 2022). Meskipun berbagai inovasi autentikasi alternatif—seperti autentikasi biometrik dan *multi-factor authentication* (MFA)—telah berkembang dengan pesat, penggunaan kata sandi tetap mendominasi karena tingkat kompatibilitasnya yang tinggi, kemudahan integrasi, serta efisiensi biaya implementasi.
 
-Kriptografi menawarkan solusi fundamental untuk meningkatkan keamanan kata sandi, baik melalui mekanisme *hashing* menggunakan algoritma seperti SHA-256, *key derivation function* seperti bcrypt dan Argon2, maupun konsep *information entropy* yang mengukur ketidakpastian dan keacakan suatu kata sandi (Kumar & Singh, 2021). Dengan menganalisis kata sandi dari sudut pandang kriptografis—termasuk perhitungan *entropy*, evaluasi kompleksitas komposisi karakter, dan estimasi waktu peretasan brute force—pengguna dapat memperoleh gambaran kuantitatif mengenai kekuatan kata sandi mereka.
+Kendati demikian, penggunaan kata sandi yang lemah masih menjadi celah keamanan utama dan merupakan penyebab dominan terjadinya insiden kebocoran data (*data breach*). Laporan tahunan *Verizon Data Breach Investigations Report* (2023) secara empiris menunjukkan bahwa lebih dari 80% insiden peretasan sistem secara langsung maupun tidak langsung melibatkan eksploitasi terhadap kredensial atau kata sandi yang lemah, rentan ditebak, ataupun telah dicuri. Berbagai metodologi serangan modern—seperti *brute-force attack*, *dictionary attack*, *credential stuffing*, dan *rainbow table attack*—secara persisten dikembangkan oleh pihak penyerang (*threat actors*) untuk mengeksploitasi kelalaian pengguna dalam merancang kata sandi mereka.
 
-Berdasarkan latar belakang tersebut, proyek ini mengembangkan aplikasi Android bernama **KriptoTugas1** yang berfungsi sebagai alat evaluasi keamanan kata sandi berbasis kriptografi. Aplikasi ini mengintegrasikan berbagai fitur keamanan, termasuk analisis kekuatan kata sandi, *password vault* terenkripsi, verifikasi integritas dokumen menggunakan SHA-256, pembuatan dan verifikasi tanda tangan digital, serta generasi sertifikat digital berbasis hash. Semua data pengguna disimpan secara aman melalui layanan Firebase Authentication dan Cloud Firestore dengan mekanisme otorisasi berbasis *user ID*.
+Dalam konteks ini, disiplin ilmu kriptografi menawarkan solusi fundamental dan analitis untuk mengevaluasi serta meningkatkan keamanan kata sandi. Pemanfaatan algoritma kriptografi—baik melalui mekanisme *hashing* searah seperti SHA-256, fungsi turunan kunci (*key derivation function*) seperti bcrypt dan Argon2, maupun penerapan metrik *information entropy*—mampu mengukur tingkat ketidakpastian (*unpredictability*) dan keacakan (*randomness*) dari sebuah kata sandi (Kumar & Singh, 2021). Evaluasi komprehensif dari sudut pandang kriptografis, yang meliputi perhitungan *entropy*, analisis kompleksitas karakter, deteksi pengulangan pola (*pattern recognition*), serta perhitungan matematis terkait estimasi waktu yang dibutuhkan untuk peretasan *brute-force*, memungkinkan sistem untuk memberikan penilaian kuantitatif yang objektif terhadap ketahanan suatu kata sandi.
 
----
-
-## 2. Rumusan Masalah
-
-Berdasarkan latar belakang yang telah diuraikan, rumusan masalah dalam pengembangan proyek ini adalah sebagai berikut:
-1. Bagaimana merancang dan membangun aplikasi Android yang dapat mengevaluasi kekuatan kata sandi pengguna secara komprehensif berdasarkan parameter kriptografis (seperti perhitungan *information entropy* dan deteksi pola)?
-2. Bagaimana mengimplementasikan fungsi hash kriptografi (SHA-256) secara aman untuk melindungi kerahasiaan kata sandi pada fitur penyimpanan *password vault*?
-3. Bagaimana menerapkan fungsi hash SHA-256 untuk mengembangkan fitur-fitur keamanan tambahan seperti verifikasi integritas dokumen, pembuatan tanda tangan digital, serta sertifikasi digital pada aplikasi?
+Berpijak pada urgensi dan latar belakang permasalahan di atas, proyek penelitian ini diinisiasi untuk mengembangkan sebuah aplikasi *mobile* berbasis sistem operasi Android dengan nama **KriptoTugas1**. Aplikasi ini dirancang secara khusus untuk berfungsi sebagai instrumen evaluasi keamanan kata sandi berbasis prinsip-prinsip kriptografi. Lebih lanjut, guna memberikan fungsionalitas yang holistik, aplikasi ini turut mengintegrasikan fitur penyimpanan kata sandi (*Password Vault*) menggunakan arsitektur *Zero-Knowledge* ke layanan *cloud* Firebase Authentication dan Cloud Firestore, dengan menerapkan mekanisme *hashing* guna menjamin kerahasiaan data pengguna.
 
 ---
 
-## 3. Batasan Masalah
+## 1.2 Rumusan Masalah
 
-Untuk menjaga fokus dan ruang lingkup pengembangan proyek, batasan masalah ditetapkan sebagai berikut:
-1. Pengembangan aplikasi difokuskan secara spesifik pada platform perangkat bergerak (mobile) dengan sistem operasi Android.
-2. Parameter evaluasi kekuatan kata sandi difokuskan pada perhitungan *information entropy*, evaluasi komposisi dasar karakter, deteksi pola umum, dan estimasi waktu peretasan *brute-force* sederhana.
-3. Fungsi kriptografi yang diimplementasikan untuk *hashing*, integritas dokumen, tanda tangan digital, dan sertifikat dibatasi pada algoritma SHA-256 dari pustaka `java.security.MessageDigest`.
-4. Sistem autentikasi pengguna dan penyimpanan data *backend* diselenggarakan secara terpusat menggunakan layanan Firebase Authentication dan Cloud Firestore.
-5. Aplikasi tidak menyertakan fitur pengisian otomatis kata sandi (*autofill*) dan tidak terintegrasi dengan aplikasi *password manager* pihak ketiga.
+Berdasarkan pemaparan latar belakang di atas, maka rumusan masalah yang akan diselesaikan dalam pengembangan perangkat lunak ini adalah sebagai berikut:
+1. Bagaimana merancang dan membangun sebuah aplikasi *mobile* berbasis Android yang mampu mengevaluasi dan memberikan penilaian kekuatan keamanan kata sandi secara akurat berdasarkan parameter kriptografis seperti *information entropy*, komposisi karakter, dan deteksi pola?
+2. Bagaimana mengimplementasikan fungsi algoritma *hash* kriptografi searah (seperti SHA-256) guna memastikan bahwa kata sandi beserta metadata pengguna dapat disimpan secara terenkripsi ke dalam pangkalan data *cloud* (Firestore), tanpa mengekspos teks asli (*plaintext*) dari kata sandi tersebut?
 
 ---
 
-## 4. Tujuan
+## 1.3 Batasan Masalah
 
-### 4.1 Tujuan Umum
-
-Merancang dan mengimplementasikan aplikasi mobile berbasis Android yang mampu mengevaluasi keamanan kata sandi secara komprehensif dengan pendekatan kriptografi, serta menyediakan fitur-fitur keamanan tambahan yang relevan untuk meningkatkan kesadaran pengguna terhadap praktik keamanan siber yang baik.
-
-### 4.2 Tujuan Khusus
-
-1. **Mengimplementasikan analisis kekuatan kata sandi** yang mencakup perhitungan *information entropy*, evaluasi komposisi karakter (huruf besar, huruf kecil, angka, simbol), deteksi pola umum (*common patterns*), dan estimasi waktu peretasan *brute force* berdasarkan parameter kriptografis.
-
-2. **Menerapkan fungsi hash kriptografi** (seperti MD5, SHA-256, dan SHA-512) dari pustaka `java.security.MessageDigest` untuk menghasilkan *fingerprint* kriptografis dari kata sandi, yang berfungsi sebagai sarana edukasi visualisasi bentuk *hash* dan implementasi prinsip *one-way function* dalam kriptografi.
-
-3. **Membangun fitur *password vault*** yang menyimpan metadata akun pengguna (nama layanan, username, skor kekuatan, dan *fingerprint* SHA-256) ke Cloud Firestore tanpa menyimpan kata sandi asli, sehingga menjamin kerahasiaan data.
-
-4. **Mengembangkan fitur verifikasi integritas dokumen** menggunakan perbandingan hash SHA-256 untuk mendeteksi perubahan konten dokumen, sebagai implementasi konsep *data integrity* dalam kriptografi.
-
-5. **Membuat fitur tanda tangan digital (*digital signature*)** berbasis hash SHA-256 yang menggabungkan identitas penandatangan dengan hash dokumen, serta menyediakan mekanisme verifikasi keaslian tanda tangan.
-
-6. **Mengimplementasikan fitur sertifikat digital** yang menghasilkan hash unik dan visualisasi berbentuk QR code dari data sertifikat, sebagai bukti otentikasi dan integritas data peserta kegiatan.
-
-7. **Mengintegrasikan Firebase Authentication dan Cloud Firestore** sebagai backend untuk autentikasi pengguna dan penyimpanan data secara *real-time* dengan aturan keamanan (*Firestore Security Rules*) yang membatasi akses data berdasarkan *user ID*.
+Untuk menjaga arah penelitian agar tetap sistematis, terarah, dan sesuai dengan batasan waktu maupun sumber daya yang tersedia, maka ditetapkan batasan-batasan masalah sebagai berikut:
+1. Pengembangan dan implementasi aplikasi dikhususkan murni untuk berjalan pada platform perangkat bergerak (*mobile device*) yang menggunakan sistem operasi Android.
+2. Fungsionalitas aplikasi dibatasi secara ketat pada dua fitur utama, yaitu instrumen pengecekan keamanan kata sandi (analisis dan evaluasi) serta ruang penyimpanan sandi (*Password Vault*) terenkripsi.
+3. Parameter matematis dan heuristik yang digunakan untuk evaluasi kekuatan kata sandi difokuskan pada perhitungan *information entropy* (Teori Shannon), analisis komposisi dasar karakter, deteksi pola umum, serta formula estimasi waktu peretasan metode *brute-force*.
+4. Algoritma kriptografi yang diaplikasikan untuk fungsionalitas keamanan penyimpanan dibatasi pada algoritma *Secure Hash Algorithm 256-bit* (SHA-256) dengan memanfaatkan pustaka standar `java.security.MessageDigest`.
+5. Manajemen autentikasi pengguna dan persistensi data *backend* diselenggarakan secara terpusat dan tersinkronisasi menggunakan layanan dari Firebase (Firebase Authentication dan Cloud Firestore).
+6. Aplikasi ini tidak dirancang untuk berfungsi sebagai layanan pengelola kata sandi komprehensif tingkat sistem; oleh karenanya, tidak menyertakan fitur pengisian otomatis kata sandi (*autofill service*) ke dalam aplikasi lain, dan tidak terintegrasi dengan ekosistem *password manager* pihak ketiga.
 
 ---
 
-## 5. Tinjauan Pustaka
+## 1.4 Tujuan Penelitian
 
-### 5.1 Kriptografi dan Keamanan Kata Sandi
+Pengembangan aplikasi ini memiliki serangkaian tujuan penelitian yang dibagi menjadi tujuan umum dan tujuan khusus, yaitu:
 
-Kriptografi (*cryptography*) merupakan ilmu dan seni mengamankan informasi melalui teknik transformasi data menjadi bentuk yang tidak dapat dibaca oleh pihak yang tidak berwenang (Stallings, 2023). Dalam konteks keamanan kata sandi, kriptografi berperan melalui beberapa mekanisme utama: fungsi hash, *key derivation function*, dan analisis *entropy*.
+### 1.4.1 Tujuan Umum
+Membangun sebuah aplikasi *mobile* berbasis Android yang secara spesifik difungsikan sebagai instrumen edukasi dan utilitas untuk mengevaluasi kekuatan keamanan kata sandi, serta menyediakan fasilitas penyimpanan aman (*Password Vault*) berbasis *cloud* dengan menerapkan prinsip-prinsip keamanan kriptografi *hashing*.
 
-Menurut Al-Asli dan Furati (2021), keamanan kata sandi sangat bergantung pada tiga faktor utama: panjang kata sandi, keacakan (*randomness*), dan ketidakprediktifan (*unpredictability*). Kata sandi yang pendek, menggunakan pola berulang, atau berasal dari kata-kata umum sangat rentan terhadap serangan otomatis.
+### 1.4.2 Tujuan Khusus
+1. **Mengimplementasikan mesin analitis kekuatan kata sandi** yang secara dinamis menghitung nilai *information entropy*, mengevaluasi komposisi karakter (*uppercase*, *lowercase*, numerik, dan simbol), mendeteksi keberadaan pola umum yang rentan, serta menyajikan estimasi matematis terkait waktu yang dibutuhkan untuk serangan *brute force*.
+2. **Menerapkan operasi fungsi hash kriptografi** (meliputi MD5, SHA-256, dan SHA-512) dari pustaka `java.security.MessageDigest` guna menghasilkan representasi sidik jari digital (*fingerprint*) dari sebuah kata sandi.
+3. **Membangun mekanisme *Password Vault* berbasis *Zero-Knowledge*** yang menyimpan kombinasi metadata akun (meliputi nama layanan dan *username*) beserta skor keamanan dan *fingerprint* kata sandi SHA-256 ke dalam layanan Cloud Firestore, tanpa pernah merekam teks asli kata sandi pengguna.
+4. **Mengintegrasikan arsitektur *Backend as a Service* (BaaS)** melalui Firebase Authentication dan Cloud Firestore guna memfasilitasi manajemen pengguna secara aman, menerapkan *Firestore Security Rules* berbasis otorisasi otentikasi.
 
-### 5.2 Fungsi Hash Kriptografi (SHA-256)
+---
 
-Secure Hash Algorithm 256-bit (SHA-256) merupakan bagian dari keluarga SHA-2 yang dirancang oleh National Security Agency (NSA) dan dipublikasikan oleh National Institute of Standards and Technology (NIST). SHA-256 menghasilkan nilai hash sepanjang 256 bit (64 karakter heksadesimal) dari input dengan ukuran sembarang (NIST, 2023).
+## 1.5 Manfaat Penelitian
 
-Sifat-sifat penting SHA-256 yang relevan dalam keamanan kata sandi meliputi:
-- **Pre-image resistance**: Secara komputasional tidak layak (*infeasible*) untuk menemukan input asli dari suatu nilai hash.
-- **Second pre-image resistance**: Tidak layak menemukan input berbeda yang menghasilkan hash yang sama.
-- **Collision resistance**: Tidak layak menemukan dua input berbeda yang menghasilkan hash yang sama.
-- **Avalanche effect**: Perubahan kecil pada input menghasilkan perubahan signifikan pada output hash.
+Adapun manfaat yang diharapkan dari hasil perancangan dan implementasi aplikasi ini meliputi:
+1. **Manfaat Teoritis:** Memberikan kontribusi pada kajian implementasi praktis algoritma kriptografi (khususnya *hashing* SHA-256 dan perhitungan *information entropy*) pada lingkungan perangkat bergerak (*mobile environment*).
+2. **Manfaat Praktis (Bagi Pengguna):** Menyediakan sebuah utilitas yang intuitif bagi masyarakat umum untuk menguji, memvalidasi, serta menyadari tingkat kerentanan kata sandi yang mereka gunakan sehari-hari, sekaligus menyediakan media penyimpanan sandi yang aman dan tidak dapat disalahgunakan secara teoretis oleh pengelola pangkalan data sekalipun.
 
-Rahmawati dan Kurniawan (2022) menunjukkan bahwa SHA-256 tetap menjadi standar yang andal untuk *password fingerprinting* dan verifikasi integritas data, meskipun untuk penyimpanan kata sandi di sisi server disarankan menggunakan *key derivation function* seperti bcrypt atau Argon2.
+---
 
-### 5.3 Information Entropy dan Kekuatan Kata Sandi
+# BAB II
+# TINJAUAN PUSTAKA
 
-*Information entropy*, yang pertama kali dikemukakan oleh Claude Shannon, mengukur tingkat ketidakpastian atau keacakan suatu informasi. Dalam konteks kata sandi, *entropy* dihitung dengan rumus (Grassi et al., 2023):
+## 2.1 Kriptografi dan Keamanan Kata Sandi
+
+Kriptografi (*cryptography*) secara fundamental didefinisikan sebagai disiplin ilmu dan seni matematika yang berfokus pada pengamanan informasi, penerapan teknik transformasi data menjadi bentuk tersandi (*ciphertext*) yang tidak dapat dibaca maupun dipahami oleh entitas yang tidak memiliki otorisasi (Stallings, 2023). Dalam lanskap keamanan kata sandi modern, kriptografi memainkan peranan esensial melalui implementasi berbagai mekanisme matematis kompleks, di antaranya fungsi *hash* searah (*one-way hash functions*), fungsi turunan kunci (*key derivation functions*), serta metrik kuantitatif seperti analisis *information entropy*.
+
+Menurut studi komprehensif yang dilakukan oleh Al-Asli dan Furati (2021), tingkat keamanan sebuah kata sandi pada dasarnya sangat bergantung pada tiga faktor pembentuk utama: panjang karakter kata sandi (*password length*), tingkat keacakan distribusi karakter (*randomness*), serta derajat ketidakprediktifan kombinasi tersebut (*unpredictability*). Kata sandi yang berukuran pendek, secara repetitif menggunakan pola yang berulang, atau mengadopsi kosakata yang lazim ditemukan dalam kamus (*dictionary words*) memiliki tingkat kerentanan yang sangat tinggi terhadap mekanisme serangan siber otomatis.
+
+## 2.2 Fungsi Hash Kriptografi (SHA-256)
+
+*Secure Hash Algorithm 256-bit* (SHA-256) merupakan salah satu algoritma *hashing* yang tergabung dalam keluarga protokol SHA-2. Algoritma ini dirancang dan dikembangkan secara khusus oleh *National Security Agency* (NSA) serta dipublikasikan sebagai standar federal oleh *National Institute of Standards and Technology* (NIST). Secara teknis, fungsi SHA-256 memproses aliran data masukan (*input/message*) dengan ukuran sembarang dan mengonversinya menjadi sebuah nilai *hash* (*message digest*) tetap sepanjang 256 bit atau direpresentasikan dalam 64 karakter heksadesimal (NIST, 2023).
+
+Signifikansi penggunaan SHA-256 dalam arsitektur keamanan kata sandi didasarkan pada empat properti kriptografis utamanya:
+1. **Pre-image resistance**: Merupakan properti yang menjadikan komputasi rekayasa balik (*reverse engineering*) tidak layak dilakukan (*infeasible*). Artinya, sangat sulit untuk mendari atau menyimpulkan data masukan asli (*plaintext*) hanya bermodalkan nilai *hash* keluarannya.
+2. **Second pre-image resistance**: Ketidakmungkinan secara komputasional untuk menemukan input sekunder yang berbeda, namun menghasilkan nilai *hash* yang sama dengan input primer yang telah diketahui.
+3. **Collision resistance**: Jaminan resistensi terhadap tabrakan, di mana secara praktis tidak mungkin untuk mengonstruksi dua input acak yang berbeda namun menghasilkan output *hash* yang identik.
+4. **Avalanche effect**: Karakteristik di mana modifikasi sekecil apa pun pada data masukan (meskipun hanya 1 bit) akan mendisrupsi proses matematis dan menghasilkan keluaran *hash* yang berubah secara drastis, sehingga menyamarkan pola hubungan antara input dan output.
+
+Implementasi fungsi *hash* SHA-256 tetap diakui sebagai standar industri yang andal untuk keperluan representasi *fingerprint* kata sandi pada metode identifikasi *zero-knowledge*, mengingat keandalannya dalam mencegah kebocoran teks asli (Kumar & Singh, 2021).
+
+## 2.3 Information Entropy dan Kekuatan Kata Sandi
+
+Konsep *Information entropy*, yang pertama kali dirumuskan oleh Claude Shannon dalam teori informasi, adalah sebuah besaran yang mengukur tingkat ketidakpastian (*uncertainty*) atau keacakan dari suatu variabel atau paket informasi. Dalam konteks evaluasi kata sandi, *entropy* direpresentasikan secara matematis untuk mengalkulasi besarnya ruang pencarian (*search space*) yang harus ditelusuri oleh seorang penyerang (Grassi et al., 2023). Rumus perhitungan *entropy* kata sandi diformulasikan sebagai:
 
 ```
 H = L × log₂(N)
 ```
 
 Di mana:
-- **H** = entropy dalam satuan bit
-- **L** = panjang kata sandi (jumlah karakter)
-- **N** = ukuran *character set* (jumlah kemungkinan karakter)
+- **H** merupakan total *entropy* dalam satuan bit.
+- **L** melambangkan panjang keseluruhan kata sandi (kuantitas karakter).
+- **N** mendefinisikan ukuran *character set* atau jumlah variasi karakter unik yang digunakan (misalnya gabungan alfabet, angka, dan simbol).
 
-Semakin tinggi nilai entropy, semakin sulit kata sandi untuk ditebak. Menurut NIST Special Publication 800-63B (Grassi et al., 2023), kata sandi dengan entropy minimal 60 bit dianggap cukup kuat untuk penggunaan umum, sedangkan entropy di atas 80 bit memberikan keamanan yang lebih tinggi terhadap serangan *brute force* modern.
+Semakin tinggi nilai *entropy* (*H*), semakin eksponensial pula kesulitan yang akan dihadapi oleh algoritma peretas dalam menebak kata sandi tersebut. Berdasarkan rekomendasi resmi dari pedoman *NIST Special Publication 800-63B* (Grassi et al., 2023), sebuah kata sandi dengan bobot *entropy* minimal 60 bit diklasifikasikan memadai untuk mengamankan akun layanan umum. Sementara itu, untuk sistem yang membutuhkan jaminan keamanan tingkat tinggi terhadap serangan *brute force* dengan komputasi paralel masif, dibutuhkan *entropy* yang melampaui 80 bit. 
 
-Fadhil dan Saputra (2022) mengklasifikasikan kekuatan kata sandi berdasarkan entropy menjadi empat kategori: lemah (< 28 bit), sedang (28–35 bit), kuat (36–59 bit), dan sangat kuat (≥ 60 bit).
+Secara akademis, Fadhil dan Saputra (2022) mengusulkan klasifikasi kekuatan kata sandi berbasis *entropy* menjadi empat kategori empiris: kategori Lemah (< 28 bit), Sedang (28–35 bit), Kuat (36–59 bit), dan Sangat Kuat (≥ 60 bit).
 
-### 5.4 Estimasi Waktu Peretasan Brute Force
+## 2.4 Estimasi Waktu Peretasan Brute Force
 
-Serangan *brute force* bekerja dengan mencoba semua kemungkinan kombinasi karakter secara sistematis. Waktu yang dibutuhkan untuk meretas kata sandi secara *brute force* dapat diestimasi berdasarkan entropy dan kecepatan *guessing* penyerang (Ur et al., 2022):
+Metode serangan *brute force* beroperasi dengan mekanisme algoritma yang mengeksekusi iterasi pencobaan seluruh kombinasi karakter secara sistematis dan masif (Ur et al., 2022). Ketahanan suatu kata sandi terhadap metode ini dapat dikuantifikasi melalui estimasi waktu rata-rata yang dibutuhkan untuk membobol pertahanannya, yang bergantung pada nilai *entropy* serta kapasitas komputasi penyerang (*guessing rate*). Formulasinya dijabarkan sebagai berikut:
 
 ```
 T = 2^H / (2 × G)
 ```
 
 Di mana:
-- **T** = estimasi waktu rata-rata dalam detik
-- **H** = entropy kata sandi dalam bit
-- **G** = jumlah *guesses per second*
+- **T** menyatakan estimasi rata-rata waktu yang diperlukan (dalam satuan detik).
+- **H** merujuk pada *entropy* kata sandi (dalam satuan bit).
+- **G** merupakan tingkat kecepatan penyerang dalam mencoba kombinasi sandi (*guesses per second*).
 
-Dengan asumsi penyerang menggunakan perangkat keras modern yang mampu melakukan 10⁹ percobaan per detik, kata sandi dengan entropy 80 bit membutuhkan waktu rata-rata lebih dari 19.000 tahun untuk ditemukan melalui *brute force*.
+Dalam simulasi skenario ancaman modern, diasumsikan seorang penyerang memiliki akses ke kluster *Graphics Processing Unit* (GPU) canggih yang mampu memproses hingga 10⁹ (satu miliar) percobaan *hash* per detik. Dengan asumsi komputasi tersebut, sebuah kata sandi yang dikonfigurasi dengan baik dan memiliki *entropy* sebesar 80 bit secara teoritis akan membutuhkan waktu rata-rata lebih dari 19.000 tahun komputasi tanpa henti untuk berhasil dipecahkan.
 
-### 5.5 Deteksi Pola Umum pada Kata Sandi
+## 2.5 Deteksi Pola Umum pada Kata Sandi
 
-Penelitian Tan et al. (2023) menunjukkan bahwa banyak pengguna masih menggunakan pola-pola yang mudah ditebak dalam kata sandi mereka, seperti:
-- **Urutan karakter berurutan** (*sequential patterns*): abc, 123, qwerty
-- **Karakter berulang** (*repeated characters*): aaa, 111, bbb
-- **Kata-kata umum** (*common words*): password, admin, welcome
+Meskipun sebuah kata sandi terlihat panjang, penelitian terkini oleh Tan et al. (2023) mendemonstrasikan bahwa kebiasaan psikologis manusia sering kali menghasilkan kata sandi yang mengadopsi pola-pola repetitif yang sangat mudah diprediksi. Beberapa jenis pola rentan tersebut meliputi:
+- **Urutan karakter sekuensial** (*sequential patterns*): Pola berurutan dari alfabet atau posisi *keyboard* (contoh: "123456", "abcdef", "qwerty").
+- **Karakter berulang** (*repeated characters*): Repetisi statis karakter identik (contoh: "aaaaaa", "111111").
+- **Kata lazim / Kosakata kamus** (*common words*): Pemilihan frasa yang mudah ditebak secara kultural (contoh: "password", "admin123", "welcome").
 
-Deteksi pola-pola tersebut merupakan komponen penting dalam evaluasi kekuatan kata sandi karena keberadaan pola umum secara signifikan menurunkan *effective entropy* kata sandi meskipun secara teoritis memiliki *character set* yang besar (Melicher et al., 2022).
+Melicher et al. (2022) menegaskan bahwa deteksi pola-pola prediktif tersebut adalah tahapan krusial dalam algoritma evaluasi kata sandi. Keberadaan satu atau lebih pola umum secara matematis akan mereduksi nilai *effective entropy* secara drastis, sehingga nilai *entropy* mentah menjadi bias karena tidak merepresentasikan tingkat kesulitan komputasi sebenarnya dalam proses penembakan (*cracking*).
 
-### 5.6 Digital Signature dan Integritas Data
+## 2.6 Firebase Authentication dan Cloud Firestore
 
-Tanda tangan digital merupakan mekanisme kriptografis yang digunakan untuk memverifikasi keaslian dan integritas suatu dokumen atau pesan. Menurut Paar dan Pelzl (2021), tanda tangan digital berbasis hash bekerja dengan menggabungkan identitas penandatangan dengan hash dari konten dokumen, menghasilkan nilai unik yang dapat diverifikasi ulang.
+Sebagai tulang punggung infrastruktur sisi *server*, *Firebase Authentication* menawarkan solusi manajemen identitas berbasis standar industri. Layanan ini membungkus proses autentikasi (seperti *email/password login*) dengan enkripsi *Transport Layer Security* (TLS) berlapis selama proses transit data, serta menyediakan mitigasi bawaan (*built-in protection*) terhadap anomali otentikasi seperti *brute force attack* (Firebase Documentation, 2024).
 
-Prinsip integritas data (*data integrity*) dalam kriptografi menjamin bahwa data tidak mengalami perubahan selama penyimpanan atau transmisi. Teknik yang paling umum digunakan adalah perbandingan nilai hash: jika hash dokumen saat ini cocok dengan hash referensi, maka dokumen dianggap autentik (Suryanto & Prabowo, 2023).
-
-### 5.7 Firebase Authentication dan Cloud Firestore
-
-Firebase Authentication menyediakan layanan autentikasi berbasis email/password yang menggunakan mekanisme keamanan berlapis, termasuk enkripsi saat transit (*TLS*), proteksi terhadap serangan *brute force*, dan integrasi dengan Identity Platform Google (Firebase Documentation, 2024).
-
-Cloud Firestore merupakan database NoSQL yang mendukung penyimpanan data terstruktur secara *real-time* dengan fitur *Firestore Security Rules* yang memungkinkan otorisasi granular berdasarkan konteks autentikasi. Dalam konteks aplikasi ini, aturan keamanan membatasi akses data sehingga setiap pengguna hanya dapat membaca dan memodifikasi data miliknya sendiri (Moroney, 2021).
+Sedangkan *Cloud Firestore* merupakan pangkalan data terdistribusi berbasis NoSQL yang diformat untuk menangani sinkronisasi data *real-time*. Komponen terpenting dari Firestore dalam konteks keamanan aplikasi adalah fitur *Firestore Security Rules*, yang memberikan kemampuan penerapan kontrol akses presisi tinggi. Sesuai prinsip *Least Privilege*, *rules* tersebut dapat diprogram untuk memvalidasi token *User ID* (UID) dari *Firebase Authentication*, guna menjamin bahwa pengguna hanya diizinkan untuk melakukan operasi *Read/Write* pada partisi data miliknya sendiri tanpa bisa menembus data pengguna lain (Moroney, 2021).
 
 ---
 
-## 6. Perancangan
+# BAB III
+# METODOLOGI DAN PERANCANGAN SISTEM
 
-### 6.1 Arsitektur Sistem
+## 3.1 Metodologi Pengembangan Perangkat Lunak
 
-Aplikasi **KriptoTugas1** dirancang menggunakan arsitektur monolitik berbasis *single-activity pattern* dengan navigasi halaman menggunakan *BottomNavigationView*. Arsitektur sistem terdiri dari tiga lapisan utama:
+Pengembangan aplikasi **KriptoTugas1** dilaksanakan menggunakan metodologi *Prototyping* iteratif. Pemilihan metodologi ini didasarkan pada fleksibilitasnya dalam mengakomodasi perubahan spesifikasi sistem terkait algoritma evaluasi keamanan selama proses rekayasa perangkat lunak berlangsung. Tahapan pengembangan mencakup: (1) identifikasi kebutuhan fungsional dan keamanan, (2) perancangan purwarupa antarmuka (*quick design*), (3) rekayasa fungsi algoritma kriptografi (evaluasi *entropy* dan *hashing*), serta (4) pengujian operasionalisasi *backend database*.
+
+## 3.2 Analisis Kebutuhan Sistem
+
+Analisis kebutuhan arsitektur direpresentasikan ke dalam dua instrumen metrik teknis utama:
+- **Kebutuhan Fungsional:** Perangkat lunak harus mampu menyelenggarakan protokol otentikasi pengguna secara presisi, memvalidasi dan membedah profil keamanan kata sandi ketika instruksi analisis dieksekusi oleh pengguna, memproduksi *fingerprint* kriptografis searah (SHA-256), serta menampung metadata evaluasi tersebut ke pangkalan data terenkripsi (*Password Vault*).
+- **Kebutuhan Non-Fungsional:** Sistem mengemban kewajiban absolut untuk menjamin privasi pengguna dengan menegakkan desain arsitektur tanpa-pengetahuan (*Zero-Knowledge Architecture*)—memastikan tidak ada ruang bagi kata sandi berbentuk teks asli (*plaintext*) untuk dapat terekam atau berdiam di lapisan *server*.
+
+## 3.3 Arsitektur Sistem
+
+Aplikasi ini dikembangkan bersandar pada arsitektur monolitik terpusat dengan mengadopsi pola rekayasa *Single-Activity Architecture* berbasis kerangka kerja *Android Jetpack*. Mekanisme rute transisi antar-halaman utama diorkestrasikan oleh komponen *BottomNavigationView*. Secara konseptual, fondasi sistem dibangun di atas tiga lapisan (*layers*) hierarkis yang independen:
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                  Presentation Layer                  │
-│  ┌────────┐ ┌───────┐ ┌────────┐ ┌───────┐ ┌─────┐ │
-│  │  Home  │ │ Vault │ │Document│ │ Sign. │ │Cert.│ │
-│  │(Analisis│ │(Pass. │ │(Verif. │ │(Tanda │ │(Ser-│ │
-│  │Password)│ │Vault) │ │Integr.)│ │Tangan)│ │tif.)│ │
-│  └────┬───┘ └───┬───┘ └───┬────┘ └───┬───┘ └──┬──┘ │
-├───────┼─────────┼─────────┼──────────┼────────┼─────┤
-│       │   Cryptographic Engine Layer │        │     │
-│  ┌────┴─────────┴─────────┴──────────┴────────┴──┐  │
-│  │  SHA-256 Hashing (java.security.MessageDigest) │  │
-│  │  Entropy Calculator  │  Strength Scorer        │  │
-│  │  Pattern Detector    │  Brute Force Estimator  │  │
-│  │  QR Code Generator   │  Signature Engine       │  │
-│  └────────────────────┬──────────────────────────┘  │
+│       ┌────────┐      ┌───────┐                    │
+│       │  Home  │      │ Vault │                    │
+│       │(Analisis│      │(Pass. │                    │
+│       │Password)│      │Vault) │                    │
+│       └────┬───┘      └───┬───┘                    │
+├────────────┼──────────────┼────────────────────────┤
+│       │   Cryptographic Engine Layer │             │
+│  ┌────┴─────────┴─────────┴──────────┴────────┐    │
+│  │  SHA-256 Hashing (java.security.MessageDigest) ││
+│  │  Entropy Calculator  │  Strength Scorer        ││
+│  │  Pattern Detector    │  Brute Force Estimator  ││
+│  └────────────────────┬───────────────────────┘    │
 ├───────────────────────┼─────────────────────────────┤
 │                 Backend Layer                        │
 │  ┌────────────────────┴─────────────────────────┐   │
@@ -166,11 +173,11 @@ Aplikasi **KriptoTugas1** dirancang menggunakan arsitektur monolitik berbasis *s
 └─────────────────────────────────────────────────────┘
 ```
 
-### 6.2 Perancangan Modul
+## 3.4 Perancangan Modul
 
-#### 6.2.1 Modul Autentikasi (Auth Gate)
+### 3.4.1 Modul Autentikasi (Auth Gate)
 
-Modul ini mengimplementasikan gerbang autentikasi menggunakan Firebase Authentication dengan skema email dan password.
+Modul ini mendefinisikan gerbang perimeter keamanan tingkat pertama (*first line of defense*) dengan memanfaatkan layanan *Firebase Authentication* melalui skema protokol kredensial konvensional (*email/password*).
 
 | Komponen | Deskripsi |
 |---|---|
@@ -179,9 +186,9 @@ Modul ini mengimplementasikan gerbang autentikasi menggunakan Firebase Authentic
 | **Output** | Status autentikasi, akses ke fitur utama |
 | **Keamanan** | Auth gate memblokir akses ke halaman utama jika user belum login; Firestore rules membatasi data per `userId` |
 
-#### 6.2.2 Modul Analisis Kekuatan Kata Sandi (Home)
+### 3.4.2 Modul Analisis Kekuatan Kata Sandi (Home)
 
-Modul inti aplikasi yang mengevaluasi kata sandi berdasarkan parameter kriptografis secara *real-time* ketika pengguna sedang mengetik (menggunakan `TextWatcher`), memberikan respons dinamis tanpa perlu menunggu instruksi klik.
+Modul mesin analitis (*analytical engine*) utama pada aplikasi yang dirancang secara khusus untuk memproses, menguji, dan memvalidasi ketahanan kata sandi berdasarkan serangkaian indikator kriptografis mendalam. Proses kalkulasi dipicu secara spesifik melalui pendelegasian aksi klik (*click event execution*), guna menghasilkan representasi laporan komprehensif yang empiris atas kekuatan kata sandi pengguna.
 
 **Alur proses analisis kata sandi:**
 
@@ -269,9 +276,9 @@ Selain itu, modul ini menyediakan fitur pendukung UX berupa kemampuan untuk meng
 | 70–89 | Kuat | Hijau (success) |
 | 90–100 | Sangat Kuat | Hijau (success) |
 
-#### 6.2.3 Modul Password Vault
+### 3.4.3 Modul Password Vault
 
-Modul penyimpanan metadata akun tanpa menyimpan kata sandi asli (*zero-knowledge approach*).
+Komponen pangkalan data privat (*private repository*) yang bertugas menyinkronkan arsip metadata kata sandi ke *server cloud* secara independen, memegang teguh larangan penyimpanan kata sandi mentah melalui pendekatan arsitektur *Zero-Knowledge*.
 
 | Komponen | Deskripsi |
 |---|---|
@@ -281,44 +288,9 @@ Modul penyimpanan metadata akun tanpa menyimpan kata sandi asli (*zero-knowledge
 | **Keamanan** | Password asli **tidak** disimpan; hanya fingerprint SHA-256 |
 | **Firestore Collection** | `users/{userId}/vault_entries` |
 
-#### 6.2.4 Modul Verifikasi Integritas Dokumen
+## 3.5 Perancangan Keamanan Data
 
-Modul untuk memeriksa keaslian dokumen melalui perbandingan hash SHA-256.
-
-| Komponen | Deskripsi |
-|---|---|
-| **Input** | Nama dokumen, Isi dokumen, Hash referensi (opsional) |
-| **Proses** | Hitung `SHA-256("DOCUMENT|nama|isi")` → Bandingkan dengan hash referensi |
-| **Output Status** | *Hash awal* (belum ada referensi), *Autentik* (hash cocok), *Tidak cocok* (ada perubahan) |
-| **Firestore Collection** | `users/{userId}/document_checks` |
-
-#### 6.2.5 Modul Tanda Tangan Digital
-
-Modul pembuatan dan verifikasi tanda tangan digital berbasis *double hashing* SHA-256.
-
-| Komponen | Deskripsi |
-|---|---|
-| **Input Generate** | Nama penandatangan, Isi dokumen |
-| **Input Verifikasi** | Nama penandatangan, Isi dokumen, Signature untuk diverifikasi |
-| **Proses** | `documentHash = SHA-256(isi)` → `signature = SHA-256("SIGNATURE|nama|documentHash")` |
-| **Verifikasi** | Hitung ulang signature → Bandingkan dengan signature yang diberikan |
-| **Firestore Collection** | `users/{userId}/signature_records` |
-
-#### 6.2.6 Modul Sertifikat Digital
-
-Modul pembuatan sertifikat digital berupa hash unik dan visualisasi QR code.
-
-| Komponen | Deskripsi |
-|---|---|
-| **Input** | Nama peserta, ID sertifikat, Nama kegiatan |
-| **Proses** | Hitung `SHA-256("CERTIFICATE|ID|nama|kegiatan")` → Generate QR bitmap dari payload |
-| **QR Payload** | `CERT_ID`, `NAMA`, `KEGIATAN`, `HASH_SHA256` |
-| **QR Generator** | Bitmap 29×29 modul dengan finder pattern standar, data dari hash SHA-256 |
-| **Firestore Collection** | `users/{userId}/certificate_records` |
-
-### 6.3 Perancangan Keamanan Data
-
-#### 6.3.1 Firestore Security Rules
+### 3.5.1 Konfigurasi Firestore Security Rules
 
 Aturan keamanan Firestore dikonfigurasi untuk membatasi akses data berdasarkan identitas pengguna yang terautentikasi:
 
@@ -339,29 +311,29 @@ Aturan ini memastikan bahwa:
 - Setiap pengguna hanya dapat mengakses data di bawah dokumen `users/{userId}` yang sesuai dengan UID-nya sendiri.
 - Operasi CRUD (Create, Read, Update, Delete) semuanya dibatasi oleh otorisasi berbasis UID.
 
-#### 6.3.2 Prinsip Zero-Knowledge Storage
+### 3.5.2 Implementasi Zero-Knowledge Storage
 
-Aplikasi tidak menyimpan kata sandi asli (*plaintext*) di mana pun, termasuk di Firestore. Yang disimpan adalah:
+Guna memastikan integritas privasi komprehensif, arsitektur aplikasi dirancang secara kaku untuk menolak persistensi kata sandi berbentuk teks asli (*plaintext*) di setiap node komputasi, termasuk pada koleksi pangkalan data awan Firestore. Struktur muatan data (*payload*) yang ditransmisikan hanya merangkum entitas berikut:
 - **Fingerprint SHA-256**: Representasi satu arah (*one-way*) dari kata sandi.
 - **Metadata analisis**: Panjang, skor kekuatan, level, dan entropy.
 - **Timestamp**: Waktu analisis dilakukan.
 
-### 6.4 Perancangan Antarmuka
+## 3.6 Perancangan Antarmuka (UI/UX)
 
-Aplikasi menggunakan **Material Design 3** dengan komponen-komponen dari pustaka `com.google.android.material`, antara lain:
+Antarmuka pengguna (*User Interface*) diproyeksikan dan diorkestrasikan dengan tunduk pada pedoman desain visual resmi mutakhir dari **Material Design 3** (M3), bernaung di bawah pustaka perangkat lunak `com.google.android.material`. Implementasi komponen-komponen utamanya meliputi:
 
 | Komponen UI | Implementasi |
 |---|---|
-| Navigasi | `BottomNavigationView` dengan 5 tab (Home, Vault, Document, Signature, Certificate) |
+| Navigasi | `BottomNavigationView` dengan 2 tab (Analisis, Vault) |
 | Input | `TextInputLayout` + `TextInputEditText` dengan dukungan *password toggle* |
 | Progress | `LinearProgressIndicator` untuk visualisasi skor kekuatan |
 | Tombol | `MaterialButton` dengan styling Material Design |
 | Layout | `ConstraintLayout` sebagai root, `ScrollView` untuk konten panjang |
 | Warna Indikator | Merah (danger/lemah), Kuning (warning/sedang), Hijau (success/kuat) |
 
-### 6.5 Teknologi yang Digunakan
+## 3.7 Spesifikasi Teknologi Pendukung
 
-| Teknologi | Versi/Spesifikasi | Fungsi |
+| Teknologi Terapan | Versi/Spesifikasi | Fungsi Operasional Spesifik |
 |---|---|---|
 | Kotlin | (Android target SDK 36) | Bahasa pemrograman utama |
 | Android SDK | Min SDK 29, Target SDK 36 | Platform pengembangan |
@@ -394,13 +366,7 @@ Moroney, L. (2021). *Firebase fundamentals: Build Android apps with Firebase and
 
 National Institute of Standards and Technology (NIST). (2023). *Secure Hash Standard (SHS)*. Federal Information Processing Standards Publication 180-4. https://doi.org/10.6028/NIST.FIPS.180-4
 
-Paar, C., & Pelzl, J. (2021). *Understanding cryptography: A textbook for students and practitioners* (2nd ed.). Springer. https://doi.org/10.1007/978-3-662-69007-9
-
-Rahmawati, D., & Kurniawan, Y. (2022). Implementasi algoritma SHA-256 untuk verifikasi integritas data pada sistem manajemen dokumen digital. *Jurnal Ilmiah Teknologi Informasi*, 18(1), 67–80. https://doi.org/10.35457/jitika.v18i1.2134
-
 Stallings, W. (2023). *Cryptography and network security: Principles and practice* (8th ed.). Pearson Education. ISBN: 978-0-13-567022-1.
-
-Suryanto, B., & Prabowo, H. (2023). Verifikasi integritas dokumen berbasis hash kriptografi SHA-256 pada platform mobile. *Jurnal Sistem dan Teknologi Informasi*, 11(2), 112–125. https://doi.org/10.26594/jsti.v11i2.3287
 
 Tan, J., Bauer, L., Christin, N., & Cranor, L. F. (2023). Practical recommendations for stronger, more usable passwords combining minimum-strength, minimum-length, and blocklist requirements. *ACM Computing Surveys*, 55(13s), 1–36. https://doi.org/10.1145/3596908
 

@@ -1,15 +1,22 @@
 package com.example.kriptotugas1
 
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -34,6 +41,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var authGate: View
     private lateinit var pageContainer: View
     private lateinit var pageHome: View
+    private lateinit var pageVault: View
+    private lateinit var bottomNavigation: BottomNavigationView
+    private lateinit var btnSaveVault: MaterialButton
+    private lateinit var rvVault: RecyclerView
+    private lateinit var vaultAdapter: VaultAdapter
 
     private lateinit var passwordInputLayout: TextInputLayout
     private lateinit var passwordInput: TextInputEditText
@@ -61,6 +73,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvAuthStatus: TextView
 
     private var firebaseAuth: FirebaseAuth? = null
+    private var firestore: FirebaseFirestore? = null
     private var firebaseReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +105,10 @@ class MainActivity : AppCompatActivity() {
         authGate = findViewById(R.id.authGate)
         pageContainer = findViewById(R.id.pageContainer)
         pageHome = findViewById(R.id.pageHome)
+        pageVault = findViewById(R.id.pageVault)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
+        btnSaveVault = findViewById(R.id.btnSaveVault)
+        rvVault = findViewById(R.id.rvVault)
 
         passwordInputLayout = findViewById(R.id.passwordInputLayout)
         passwordInput = findViewById(R.id.etPassword)
@@ -127,6 +144,7 @@ class MainActivity : AppCompatActivity() {
             firebaseReady = FirebaseApp.getApps(this).isNotEmpty()
             if (firebaseReady) {
                 firebaseAuth = FirebaseAuth.getInstance()
+                firestore = FirebaseFirestore.getInstance()
             }
         } catch (exception: Exception) {
             firebaseReady = false
@@ -175,16 +193,39 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        btnSaveVault.setOnClickListener {
+            showSaveVaultDialog()
+        }
+
+        vaultAdapter = VaultAdapter(emptyList())
+        rvVault.layoutManager = LinearLayoutManager(this)
+        rvVault.adapter = vaultAdapter
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    pageHome.visibility = View.VISIBLE
+                    pageVault.visibility = View.GONE
+                    true
+                }
+                R.id.nav_vault -> {
+                    pageHome.visibility = View.GONE
+                    pageVault.visibility = View.VISIBLE
+                    loadVaultData()
+                    true
+                }
+                else -> false
+            }
+        }
+
+
+
         passwordInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                val password = s?.toString() ?: ""
-                if (password.isNotEmpty()) {
-                    passwordInputLayout.error = null
-                    val report = createPasswordReport(password)
-                    renderReport(report)
-                } else {
+                passwordInputLayout.error = null
+                if (s.isNullOrEmpty()) {
                     resetDashboard()
                 }
             }
@@ -282,6 +323,7 @@ class MainActivity : AppCompatActivity() {
         authGate.visibility = if (isLoggedIn) View.GONE else View.VISIBLE
         pageContainer.visibility = if (isLoggedIn) View.VISIBLE else View.GONE
         pageHome.visibility = if (isLoggedIn) View.VISIBLE else View.GONE
+        if (!isLoggedIn) pageVault.visibility = View.GONE
     }
 
     private fun analyzePassword() {
@@ -295,6 +337,96 @@ class MainActivity : AppCompatActivity() {
         passwordInputLayout.error = null
         val report = createPasswordReport(password)
         renderReport(report)
+    }
+
+    private fun showSaveVaultDialog() {
+        val password = passwordInput.textValue()
+        if (password.isBlank()) {
+            Toast.makeText(this, "Password kosong! Lakukan analisis terlebih dahulu.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val report = createPasswordReport(password)
+        
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_save_vault, null)
+        val etService = dialogView.findViewById<TextInputEditText>(R.id.etServiceName)
+        val etUsername = dialogView.findViewById<TextInputEditText>(R.id.etUsername)
+
+        AlertDialog.Builder(this)
+            .setTitle("Simpan ke Vault")
+            .setView(dialogView)
+            .setPositiveButton("Simpan") { _, _ ->
+                val service = etService.text?.toString()?.trim() ?: ""
+                val username = etUsername.text?.toString()?.trim() ?: ""
+                if (service.isNotEmpty() && username.isNotEmpty()) {
+                    saveToFirestore(service, username, report)
+                } else {
+                    Toast.makeText(this, "Layanan dan Username wajib diisi!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
+    private fun saveToFirestore(serviceName: String, username: String, report: PasswordReport) {
+        val user = firebaseAuth?.currentUser
+        if (user == null || firestore == null) {
+            Toast.makeText(this, "Gagal menyimpan. Pastikan sudah login.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Pendekatan Zero-Knowledge: Menggabungkan metadata dengan password asli untuk membuat fingerprint
+        // dengan demikian plaintext password tidak dikirim ke server.
+        val rawData = "VAULT|$serviceName|$username|${passwordInput.textValue()}"
+        val fingerprint = sha256(rawData)
+
+        val vaultData = hashMapOf(
+            "serviceName" to serviceName,
+            "username" to username,
+            "strengthLevel" to report.level,
+            "fingerprintSha256" to fingerprint,
+            "createdAt" to System.currentTimeMillis()
+        )
+
+        firestore!!.collection("users").document(user.uid)
+            .collection("vault_entries")
+            .add(vaultData)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Berhasil disimpan ke Vault", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Gagal menyimpan: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun loadVaultData() {
+        val user = firebaseAuth?.currentUser
+        if (user == null || firestore == null) return
+
+        firestore!!.collection("users").document(user.uid)
+            .collection("vault_entries")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null || snapshot == null) return@addSnapshotListener
+                
+                val entries = snapshot.documents.mapNotNull { doc ->
+                    val serviceName = doc.getString("serviceName") ?: ""
+                    val username = doc.getString("username") ?: ""
+                    val strengthLevel = doc.getString("strengthLevel") ?: ""
+                    val fingerprint = doc.getString("fingerprintSha256") ?: ""
+                    val createdAt = doc.getLong("createdAt") ?: 0L
+                    
+                    VaultEntry(
+                        id = doc.id,
+                        serviceName = serviceName,
+                        username = username,
+                        strengthLevel = strengthLevel,
+                        fingerprintSha256 = fingerprint,
+                        createdAt = createdAt
+                    )
+                }
+                vaultAdapter.updateData(entries)
+            }
     }
 
 
@@ -372,6 +504,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderReport(report: PasswordReport) {
+        findViewById<View>(R.id.resultContainer).visibility = View.VISIBLE
         val scoreColor = ContextCompat.getColor(this, colorForScore(report.score))
         progressStrength.setIndicatorColor(scoreColor)
         progressStrength.setProgress(report.score, true)
@@ -398,6 +531,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetDashboard() {
+        findViewById<View>(R.id.resultContainer).visibility = View.GONE
         val neutralColor = ContextCompat.getColor(this, R.color.text_secondary)
         progressStrength.setIndicatorColor(ContextCompat.getColor(this, R.color.primary))
         progressStrength.setProgress(0, false)
